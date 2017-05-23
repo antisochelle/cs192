@@ -1,0 +1,245 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Student Disciplinary Council</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'style/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{% static 'style/simple-sidebar.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/cssreset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/view_cases.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/bootstrap_elements.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/bootstrap_table.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/new_calendar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/tabs.css' %}">
+
+    <!-- For dropdown -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="banner">
+        <img class="logos" src="{% static 'images/logo.png' %}" id="uplogo" alt="our logo">
+        <div class="logos" id="sitename">
+            <a href="#">Student Disciplinary Council</a>
+        </div>
+    </div>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="/home"><i class="fa fa-home fw"></i>       Dashboard</a>
+                </li>
+                <li>
+                    <a href="/cases"><i class="fa fa-file-text-o fw"></i>       Cases</a>
+                </li>
+                <li>
+                    <a href="/logout"><i class="fa fa-power-off fw"></i>       Logout</a>
+                </li>
+            </ul>
+        
+        <div class = "cal-container">
+            <div id="cal">
+                <div class="cal-my-header">
+                    <span class="left button" id="prev"> &lang; </span> 
+                    <span class="month-year" id="label">June 2010</span> 
+                    <span class="right button" id="next"> &rang; </span>
+                </div>
+                
+                <table id="days">
+                    <td>Sun</td> 
+                    <td>Mon</td> 
+                    <td>Tue</td> 
+                    <td>Wed</td> 
+                    <td>Thu</td> 
+                    <td>Fri</td> 
+                    <td>Sat</td>
+                </table>
+                
+                <div id="cal-frame">
+                    <table class="curr"> 
+                        <tbody> 
+                            <tr><td class="nil"></td><td class="nil"></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr> 
+                            <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td class="today">11</td><td>12</td></tr> 
+                            <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr> 
+                            <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr> 
+                            <tr><td>27</td><td>28</td><td>29</td><td>30</td><td class="nil"></td><td class="nil"></td><td class="nil"></td></tr> 
+                        </tbody> 
+                    </table>            
+                </div>
+
+            </div> <!--end calendar --> 
+        </div> <!--end cal-container --> 
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    {% block content%}
+                    {% if queryset %}
+                    {% for instance in queryset %}
+                        <h2 class="h2_view_cases">Viewing Case: {{ instance.case_number }}</h2>
+                    {% endfor %}
+                        <br>
+                        <div class="tabs">
+                            <ul class="tab-links">
+                                <li class="active"><a href="#tab1">Stage 1</a></li>
+                                <li><a href="#tab2">Stage 2</a></li>
+                                <li><a href="#tab3">Stage 3</a></li>
+                            </ul>
+                         
+                            <div class="tab-content">
+                                <div id="tab1" class="tab active">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <!-- cases_misconducts_respondents details -->
+                                            {% if contents != 0 %}
+                                                {% for instance in cmr %}
+                                                    <tr><td><b>Respondent name:</b></td> <td>{{ instance.respondent_id.first_name }}</td> </tr>
+                                                    <tr><td><b>College:</b></td> <td>{{ instance.respondent_id.department_id.college_id.name }}</td> </tr>
+                                                    <tr><td><b>Department:</b></td> <td>{{ instance.respondent_id.department_id.name }}</td> </tr>
+                                                    <tr><td><b>Misconduct:</b></td> <td>{{ instance.misconduct_details }}</td> </tr>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                            <!-- Cases details -->
+                                            {% for instance in queryset %}
+                                            <tr><td><b>Complaint received on:</b></td> <td>{{ instance.complaint_date_received }}</td> </tr>
+                                            <tr><td><b>SDC Complaint receipt deadline:</b></td> <td>{{ instance.complaint_sdc_receipt_deadline }}</td> </tr>
+                                            <tr><td><b>Initial report deadline:</b></td> <td>{{ instance.initial_report_deadline }}</td></tr>
+                                            <tr><td><b>Initial report release date:</b></td> <td>{{ instance.initial_report_release_date }}</td></tr>
+                                            <tr><td><b>Jurisdiction:</b></td> <td>{{ instance.jurisdiction }}</td></tr>
+                                            <tr><td><b>Is ADR ok?</b></td> <td>{% if instance.is_adr_ok == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                            <tr><td><b>ADR deadline:</b></td> <td>{{ instance.adr_deadline }}</td></tr>
+                                            <tr><td><b>Did ADR work?</b></td> <td>{% if instance.did_adr_work == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                        </tbody>      
+                                    </table>
+                                </div>
+                         
+                                <div id="tab2" class="tab">
+                                    <table class="table table-hover">
+                                        <tbody>   
+                                        <tr><td><b>Case Number:</b></td> <td>{{ instance.case_number }}</td></tr>
+                                        <tr><td><b>ADHDC Hearing Member:</b></td> <td>{{ instance.cases_id.member_id.last_name }}</td></tr>
+                                        <tr><td><b>ADHDC Constitution deadline:</b></td> <td>{{ instance.adhdc_constitution_deadline }}</td></tr>
+                                        <tr><td><b>ADHDC Constitution date:</b></td> <td>{{ instance.ahdhc_constitution_date }}</td></tr>
+                                        <tr><td><b>ADHDC Orientation date:</b></td> <td>{{ instance.ahdhc_orientation_date }}</td></tr>
+                                        <tr><td><b>Summons issuance deadline:</b></td> <td>{{ instance.summons_issuance_deadline }}</td></tr>
+                                        <tr><td><b>Summons issuance date:</b></td> <td>{{ instance.summons_issuance_date}}</td></tr>
+                                        <tr><td><b>Summons service deadline:</b></td> <td>{{ instance.summons_service_deadline }}</td></tr>
+                                        <tr><td><b>Summons service date:</b></td> <td>{{ instance.summons_service_date }}</td></tr>
+                                        <tr><td><b>Summons receipt deadline:</b></td> <td>{{ instance.summons_receipt_deadline }}</td></tr>
+                                        <tr><td><b>Summons receipt date:</b></td> <td>{{ instance.summons_receipt_date }}</td></tr>
+                                        <tr><td><b>Respondent answer deadline:</b></td> <td>{{ instance.respondent_answer_deadline }}</td></tr>
+                                        <tr><td><b>Respondent answer date:</b></td> <td>{{ instance.respondednt_answer_date }}</td></tr>
+                                        <tr><td><b>ADHDC preliminary deliberation date:</b></td> <td>{{ instance.ahdhc_preliminary_deliberation_date }}</td></tr>
+                                        <tr><td><b>Preliminary meeting notice deadline:</b></td> <td>{{ instance.preliminary_meeting_notice_deadline }}</td></tr>
+                                        <tr><td><b>Preliminary meeting date:</b></td> <td>{{ instance.preliminary_meeting_date}}</td></tr>
+                                        <tr><td><b>Preliminary meeting report done?</b></td> <td>{% if instance.preliminary_meeting_report_done == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                        <tr><td><b>Preliminary meeting report filed on:</b></td> <td>{{ instance.preliminary_meeting_report_date_filed }}</td></tr>
+                                        <tr><td><b>Case resolution deadline:</b></td> <td>{{ instance.case_resolution_deadline }}</td></tr>
+                                        <tr><td><b>Final committee report deadline:</b></td> <td>{{ instance.final_committee_report_deadline }}</td></tr>
+                                        <tr><td><b>Final committee report receipt date:</b></td> <td>{{ instance.final_committee_report_receipt_date }}</td></tr>
+                                        </tbody>
+                                </table>
+                                </div>
+                         
+                                <div id="tab3" class="tab">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr><td><b>Decision issuance deadline:</b></td> <td>{{ instance.decision_issuance_deadline }}</td></tr>
+                                            <tr><td><b>Decision issuance date:</b></td> <td>{{ instance.decision_issuance_date }}</td></tr>
+                                            <tr><td><b>Decision copy to Chancellor deadline:</b></td> <td>{{ instance.decision_copy_to_chancellor_deadline }}</td></tr>
+                                            <tr><td><b>Decision copy to Chancellor date:</b></td> <td>{{ instance.decision_copy_to_chancellor_date }}</td></tr>
+                                            <tr><td><b>Decision receipt date:</b></td> <td>{{ instance.decision_receipt_date }}</td></tr>
+                                            <tr><td><b>Appeal deadline:</b></td> <td>{{ instance.appeal_deadline }}</td></tr>
+                                            <tr><td><b>Appeal made?</b></td> <td>{% if instance.appeal_made == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                            {% if contents != 0 %}
+                                                {% for instance in cmr %}
+                                                    <tr><td><b>Is guilty?</b></td> <td>{% if instance.is_guilty == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                                    <tr><td><b>Corrective Measure</b></td> <td>{% instance.corrective_measure %}</td></tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <tr><td><b>Case closed?</b></td> <td>{% if instance.case_closed == 1 %}Yes{% else %}No{% endif %}</td></tr>
+                                        </tbody>
+                                    </table>
+                                    {%endfor %}
+                                </div>
+                            </div>
+                        </div> <!-- end tabs -->
+                        {% endif %}
+                        {% endblock %}
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+
+                        <a href="/cases/"><button type="button" class="btn btn-primary">Back</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br><br><br>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    
+    <!--FOR DROPDOWN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--FOR CALENDAR -->
+    <script src="{% static 'js/new_calendar.js' %}"></script>
+    <script>
+    var cal= CALENDAR();
+    cal.init();
+    </script>
+
+    <!--TABS JS-->
+    <script src="{% static 'js/tabs.js' %}"></script>    
+</body>
+
+</html>

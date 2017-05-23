@@ -1,0 +1,63 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'style/login.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'style/cssreset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'style/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'style/form-control-for-login.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}">
+	
+	<title>Student Disciplinary Council</title>
+</head>
+
+<body style="margin-left:0px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px;">
+	<div class="banner">
+		<img class="logos" src="{% static 'images/logo.png' %}" id="uplogo" alt="our logo">
+		<div id="sitename">
+			<a href="#">Student Disciplinary Council</a>
+		</div>
+	</div>
+    
+
+<div class="login-page">
+		<div class="form">
+			<form method="post" action="{{ redirect_to }}"> {% csrf_token %}
+		    <input type="text" name="username" placeholder="Username"/>
+	        <select name = "acc_type" class="form-control">
+                <option></option>
+                <option>Admin</option>
+                <option>Chair</option>
+                <option>Staff</option>
+                <option>Member</option>
+            </select>
+            <input type="password" name="password" placeholder="Password"/>
+		    <input type="submit" value="Login" />
+
+		    {% if messages %}
+			<div>
+					{% for message in messages %}
+					    <div class="alert alert-{{ message.tags }}">
+					        {{ message|safe }}
+					    </div>
+					{% endfor %}
+			</div>
+			{% endif %}
+
+		</form>
+		
+		</div>
+		<br></br>
+	</div>
+
+ 
+</body>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<footer class="foot">
+    &#169; Department of Computer Science<br/>University of the Philippines Diliman
+</footer>
+</html>
